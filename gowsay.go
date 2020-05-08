@@ -140,7 +140,11 @@ func maxWidth(msgs []string) int {
 
 func renderCow(face Face) (string, error) {
 	var output bytes.Buffer
-	t := template.Must(template.New("cow").Parse(cows[face.Cowfile]))
+	templateString, exists := cows[face.Cowfile]
+	if !exists {
+		return "", fmt.Errorf("No such template: %s", face.Cowfile)
+	}
+	t := template.Must(template.New("cow").Parse(templateString))
 	if err := t.Execute(&output, face); err != nil {
 		return "", err
 	}
