@@ -9,5 +9,7 @@ import (
 func TestGowsay(t *testing.T) {
 	output, err := gowsay.MakeCow("Hello there", gowsay.Mooptions{})
 	assert.Nil(t, err)
-	assert.NotEqual(t, "", output)
+	assert.Contains(t, output, "Hello there")
+	// The default cow is the apt one
+	assert.Contains(t, output, "/------\\/")
 }

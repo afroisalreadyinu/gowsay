@@ -32,10 +32,17 @@ type Mooptions struct {
 }
 
 func newFace(options Mooptions) Face {
+	cowfile := ""
+	if options.Cowfile == "" {
+		cowfile = "apt"
+	} else {
+		cowfile = options.Cowfile
+	}
+
 	f := Face{
 		Eyes:    "oo",
 		Tongue:  "  ",
-		Cowfile: options.Cowfile,
+		Cowfile: cowfile,
 	}
 
 	if options.Borg {
@@ -147,11 +154,9 @@ func MakeCow(sentence string, options Mooptions) (string, error) {
 
 	face := newFace(options)
 	balloon := constructBallon(face, messages, width, options.Think)
-
-	fmt.Println(balloon)
 	cow, err := renderCow(face)
 	if err != nil {
 		return "", err
 	}
-	return cow, nil
+	return strings.Join([]string{balloon, cow}, "\n"), nil
 }
