@@ -1,16 +1,62 @@
 package gowsay
 
-import (
-	"fmt"
-	"sort"
+type CowType int
+
+const (
+	Apt CowType = iota + 1
+	BeavisZen
+	Bong
+	BudFrogs
+	Bunny
+	Calvin
+	Cheese
+	Rooster
+	Cower
+	Daemon
+	Default
+	DragonAndCow
+	Dragon
+	Duck
+	ElephantInSnake
+	Elephant
+	Eyes
+	FlamingSheep
+	Ghostbusters
+	Gnu
+	HeadIn
+	HelloKitty
+	Kiss
+	Kitty
+	Koala
+	Kosh
+	LukeKoala
+	MechAndCow
+	Meow
+	Milk
+	Moofasa
+	Moose
+	Mutilated
+	PonySmaller
+	Pony
+	Ren
+	Sheep
+	Skeleton
+	Snowman
+	Stegosaurus
+	Stimpy
+	Turkey
+	Turtle
+	Tux
+	UniponySmaller
+	Unipony
 )
 
-var cows map[string]string
+var cows map[CowType]string
 
 func init() {
-	cows = make(map[string]string)
+	cows = make(map[CowType]string)
 
-	cows["apt"] = `       {{.Thoughts}} (__)
+	cows[Apt] = `       {{.Thoughts}} (__)
          ({{.Eyes}})
    /------\/
   / |    ||
@@ -18,7 +64,7 @@ func init() {
     ~~   ~~
 `
 
-	cows["beavis.zen"] = `   {{.Thoughts}}         __------~~-,
+	cows[BeavisZen] = `   {{.Thoughts}}         __------~~-,
     {{.Thoughts}}      ,'            ,
           /               \
          /                :
@@ -38,7 +84,7 @@ func init() {
              /            _ \
 `
 
-	cows["bong"] = `         {{.Thoughts}}
+	cows[Bong] = `         {{.Thoughts}}
           {{.Thoughts}}
             ^__^
     _______/({{.Eyes}})
@@ -51,7 +97,7 @@ func init() {
             _+#+_
 `
 
-	cows["bud-frogs"] = `     {{.Thoughts}}
+	cows[BudFrogs] = `     {{.Thoughts}}
       {{.Thoughts}}
           oO)-.                       .-(Oo
          /__  _\                     /_  __\
@@ -60,14 +106,14 @@ func init() {
           '  '--'    =='-'==        '--'  '
 `
 
-	cows["bunny"] = `  {{.Thoughts}}
+	cows[Bunny] = `  {{.Thoughts}}
    {{.Thoughts}}   \
         \ /\
         ( )
       .( o ).
 `
 
-	cows["calvin"] = ` {{.Thoughts}}                   .,
+	cows[Calvin] = ` {{.Thoughts}}                   .,
    {{.Thoughts}}         .      .TR   d'
      {{.Thoughts}}      k,l    .R.b  .t .Je
        {{.Thoughts}}   .P q.   a|.b .f .Z%
@@ -102,7 +148,7 @@ func init() {
                '^^^^^''
 `
 
-	cows["cheese"] = `   {{.Thoughts}}
+	cows[Cheese] = `   {{.Thoughts}}
     {{.Thoughts}}
       _____   _________
      /     \_/         |
@@ -122,7 +168,7 @@ func init() {
        /___\  /___\
 `
 
-	cows["cock"] = `    {{.Thoughts}}
+	cows[Rooster] = `    {{.Thoughts}}
      {{.Thoughts}}  /\/\
        \   /
        |  0 >>
@@ -135,7 +181,7 @@ func init() {
    /\     /\
 `
 
-	cows["cower"] = `     {{.Thoughts}}
+	cows[Cower] = `     {{.Thoughts}}
       {{.Thoughts}}
         ,__, |    |
         (oo)\|    |___
@@ -146,7 +192,7 @@ func init() {
              Cower....
 `
 
-	cows["daemon"] = `   {{.Thoughts}}         ,        ,
+	cows[Daemon] = `   {{.Thoughts}}         ,        ,
     {{.Thoughts}}       /(        )'
      {{.Thoughts}}      \ \___   / |
             /- _  '-/  '
@@ -167,14 +213,14 @@ func init() {
       '--{__________)        \/
 `
 
-	cows["default"] = `        {{.Thoughts}}   ^__^
+	cows[Default] = `        {{.Thoughts}}   ^__^
          {{.Thoughts}}  ({{.Eyes}})\_______
             (__)\       )\/\
              {{.Tongue}} ||----w |
                 ||     ||
 `
 
-	cows["dragon-and-cow"] = `                       {{.Thoughts}}                    ^    /^
+	cows[DragonAndCow] = `                       {{.Thoughts}}                    ^    /^
                         {{.Thoughts}}                  / \  // \
                          {{.Thoughts}}   |\___/|      /   \//  .\
                           {{.Thoughts}}  /O  O  \__  /    //  | \ \           *----*
@@ -192,7 +238,7 @@ func init() {
             //    \\               ///-._ _ _ _ _ _ _{^ - - - - ~
 `
 
-	cows["dragon"] = `      {{.Thoughts}}                    / \  //\
+	cows[Dragon] = `      {{.Thoughts}}                    / \  //\
        {{.Thoughts}}    |\___/|      /   \//  \\
             /0  0  \__  /    //  | \ \
            /     /  \/_/    //   |  \  \
@@ -210,13 +256,13 @@ func init() {
                                                                   /.-~
 `
 
-	cows["duck"] = ` {{.Thoughts}}
+	cows[Duck] = ` {{.Thoughts}}
   {{.Thoughts}}
    {{.Thoughts}} >()_
       (__)__ _
 `
 
-	cows["elephant-in-snake"] = `       {{.Thoughts}}
+	cows[ElephantInSnake] = `       {{.Thoughts}}
         {{.Thoughts}}  ....
           .    ........
           .            .
@@ -226,7 +272,7 @@ func init() {
 Elephant inside ASCII snake
 `
 
-	cows["elephant"] = ` {{.Thoughts}}     /\  ___  /\
+	cows[Elephant] = ` {{.Thoughts}}     /\  ___  /\
   {{.Thoughts}}   // \/   \/ \\
      ((    O O    ))
       \\ /     \ //
@@ -238,7 +284,7 @@ Elephant inside ASCII snake
         |m|   |m|
 `
 
-	cows["eyes"] = `    {{.Thoughts}}
+	cows[Eyes] = `    {{.Thoughts}}
      {{.Thoughts}}
                                    .::!!!!!!!:.
   .!!!!!:.                        .:!!!!!!!!!!!!
@@ -251,7 +297,7 @@ Elephant inside ASCII snake
              """"          """""""
 `
 
-	cows["flaming-sheep"] = `  {{.Thoughts}}            .    .     .
+	cows[FlamingSheep] = `  {{.Thoughts}}            .    .     .
    {{.Thoughts}}      .  . .     '  ,
     {{.Thoughts}}    .; .  : .' :  :  : .
      {{.Thoughts}}   i..': i' i.i.,i  i .
@@ -263,7 +309,7 @@ Elephant inside ASCII snake
                  ||    ||
 `
 
-	cows["ghostbusters"] = `          {{.Thoughts}}
+	cows[Ghostbusters] = `          {{.Thoughts}}
            {{.Thoughts}}
             {{.Thoughts}}          __---__
                     _-       /--______
@@ -286,7 +332,7 @@ Elephant inside ASCII snake
                   ""VXXXXXXXXXXXXXXXXXXV""
 `
 
-	cows["gnu"] = `    {{.Thoughts}}               ,-----._
+	cows[Gnu] = `    {{.Thoughts}}               ,-----._
   .  {{.Thoughts}}         .  ,'        '-.__,------._
  //   {{.Thoughts}}      __\\'                        '-.
 ((    _____-'___))                           |
@@ -307,7 +353,7 @@ Elephant inside ASCII snake
                /__/
 `
 
-	cows["head-in"] = `    {{.Thoughts}}
+	cows[HeadIn] = `    {{.Thoughts}}
      {{.Thoughts}}
     ^__^         /
     ({{.Eyes}})\_______/  _________
@@ -316,7 +362,7 @@ Elephant inside ASCII snake
         ||     ||   ||           ||
 `
 
-	cows["hellokitty"] = `  {{.Thoughts}}
+	cows[HelloKitty] = `  {{.Thoughts}}
    {{.Thoughts}}
       /\_)o<
      |      \
@@ -324,7 +370,7 @@ Elephant inside ASCII snake
       \_____/
 `
 
-	cows["kiss"] = `     {{.Thoughts}}
+	cows[Kiss] = `     {{.Thoughts}}
       {{.Thoughts}}
              ,;;;;;;;,
             ;;;;;;;;;;;,
@@ -347,7 +393,7 @@ Elephant inside ASCII snake
       |       |            |
 `
 
-	cows["kitty"] = `     {{.Thoughts}}
+	cows[Kitty] = `     {{.Thoughts}}
       {{.Thoughts}}
        ("'-'  '-/") .___..--' ' "'-._
          ' *_ *  )    '-.   (      ) .'-.__. ')
@@ -356,7 +402,7 @@ Elephant inside ASCII snake
    ( i l ),-''  ( l i),'  ( ( ! .-'
 `
 
-	cows["koala"] = `  {{.Thoughts}}
+	cows[Koala] = `  {{.Thoughts}}
    {{.Thoughts}}
        ___
      {~._.~}
@@ -365,7 +411,7 @@ Elephant inside ASCII snake
      (_)-(_)
 `
 
-	cows["kosh"] = `    {{.Thoughts}}
+	cows[Kosh] = `    {{.Thoughts}}
      {{.Thoughts}}
       {{.Thoughts}}
   ___       _____     ___
@@ -381,7 +427,7 @@ Elephant inside ASCII snake
 |                         |
 `
 
-	cows["luke-koala"] = `  {{.Thoughts}}
+	cows[LukeKoala] = `  {{.Thoughts}}
    {{.Thoughts}}          .
        ___   //
      {~._.~}//
@@ -393,7 +439,7 @@ Elephant inside ASCII snake
      koala
 `
 
-	cows["mech-and-cow"] = `                                   ,-----.
+	cows[MechAndCow] = `                                   ,-----.
                                    |     |
                                 ,--|     |-.
                          __,----|  |     | |
@@ -411,7 +457,7 @@ Elephant inside ASCII snake
        ||     ||          i_____;----\.____i""\____\
 `
 
-	cows["meow"] = `  {{.Thoughts}}
+	cows[Meow] = `  {{.Thoughts}}
    {{.Thoughts}} ,   _ ___.--''''--''//-,-_--_.
       \'"' ' || \\ \ \\/ / // / ,-\\',_
      /''  \ \ || Y  | \|/ / // / - |__ '-,
@@ -423,7 +469,7 @@ Elephant inside ASCII snake
          (((__/(((_.' ((___..-'((__,'
 `
 
-	cows["milk"] = ` {{.Thoughts}}     ____________
+	cows[Milk] = ` {{.Thoughts}}     ____________
   {{.Thoughts}}    |__________|
       /           /\
      /           /  \
@@ -441,7 +487,7 @@ Elephant inside ASCII snake
        <__/    \__>
 `
 
-	cows["moofasa"] = `       {{.Thoughts}}    ____
+	cows[Moofasa] = `       {{.Thoughts}}    ____
         {{.Thoughts}}  /    \
           | ^__^ |
           | ({{.Eyes}}) |______
@@ -452,7 +498,7 @@ Elephant inside ASCII snake
                  Moofasa
 `
 
-	cows["moose"] = `  {{.Thoughts}}
+	cows[Moose] = `  {{.Thoughts}}
    {{.Thoughts}}   \_\_    _/_/
     {{.Thoughts}}      \__/
            ({{.Eyes}})\_______
@@ -461,14 +507,14 @@ Elephant inside ASCII snake
                ||     ||
 `
 
-	cows["mutilated"] = `       {{.Thoughts}}   \_______
+	cows[Mutilated] = `       {{.Thoughts}}   \_______
  v__v   {{.Thoughts}}  \   O   )
  ({{.Eyes}})      ||----w |
  (__)      ||     ||  \/\
   {{.Tongue}}
 `
 
-	cows["pony-smaller"] = `     {{.Thoughts}}      _^^
+	cows[PonySmaller] = `     {{.Thoughts}}      _^^
       {{.Thoughts}}   _- {{.Eyes}}\
           \----- \______
            {{.Tongue}}   \       )\
@@ -476,7 +522,7 @@ Elephant inside ASCII snake
                 ||     ||
 `
 
-	cows["pony"] = `       {{.Thoughts}}          /\/\
+	cows[Pony] = `       {{.Thoughts}}          /\/\
         {{.Thoughts}}         \/\/
          {{.Thoughts}}        /   -\
           {{.Thoughts}}     /  {{.Eyes}}   -\
@@ -504,7 +550,7 @@ Elephant inside ASCII snake
                                  +--+                       ---+
 `
 
-	cows["ren"] = `   {{.Thoughts}}
+	cows[Ren] = `   {{.Thoughts}}
     {{.Thoughts}}
     ____
    /# /_\_
@@ -523,7 +569,7 @@ Elephant inside ASCII snake
     (___)_)
 `
 
-	cows["sheep"] = `  {{.Thoughts}}
+	cows[Sheep] = `  {{.Thoughts}}
    {{.Thoughts}}
        __
       U{{.Eyes}}U\.'@@@@@@'.
@@ -533,7 +579,7 @@ Elephant inside ASCII snake
             ||    ||
 `
 
-	cows["skeleton"] = `          {{.Thoughts}}      (__)
+	cows[Skeleton] = `          {{.Thoughts}}      (__)
            {{.Thoughts}}     /{{.Eyes}}|
             {{.Thoughts}}   (_"_)*+++++++++*
                    //I#\\\\\\\\I\
@@ -544,7 +590,7 @@ Elephant inside ASCII snake
                      Scowleton
 `
 
-	cows["snowman"] = `   {{.Thoughts}}
+	cows[Snowman] = `   {{.Thoughts}}
  ___###
    /{{.Eyes}}\ |||
    \{{.Tongue}}/ \|/
@@ -557,19 +603,7 @@ Elephant inside ASCII snake
   \____/ I
 `
 
-	cows["sodomized-sheep"] = `  {{.Thoughts}}                 __
-   {{.Thoughts}}               ({{.Eyes}})
-    {{.Thoughts}}              ({{.Tongue}})
-     {{.Thoughts}}             /--\
-       __         / \  \
-      U{{.Eyes}}U\.'@@@@@@'.\  )
-      \__/(@@@@@@@@@@) /
-           (@@@@@@@@)((
-           'YY~~~~YY' \\
-            ||    ||   >>
-`
-
-	cows["stegosaurus"] = `{{.Thoughts}}                             .       .
+	cows[Stegosaurus] = `{{.Thoughts}}                             .       .
  {{.Thoughts}}                           / '.   .' "
   {{.Thoughts}}                  .---.  <    > <    >  .---.
    {{.Thoughts}}                 |    \  \ - ~ ~ - /  /    |
@@ -585,7 +619,7 @@ Elephant inside ASCII snake
                      |_____|        |_____|         ~ - . _ _ _ _ _>
 `
 
-	cows["stimpy"] = `  {{.Thoughts}}     .    _  .
+	cows[Stimpy] = `  {{.Thoughts}}     .    _  .
    {{.Thoughts}}    |\_|/__/|
        / / \/ \  \
       /__|O||O|__ \
@@ -601,21 +635,7 @@ Elephant inside ASCII snake
       (____(____)
 `
 
-	cows["suse"] = `  {{.Thoughts}}
-   {{.Thoughts}}____
-  /@    ~-.
-  \/ __ .- |
-   // //  @
-`
-
-	cows["three-eyes"] = `        {{.Thoughts}}  ^___^
-         {{.Thoughts}} ({{.DobuleEyes}})\_______
-           (___)\       )\/\
-            {{.Tongue}}  ||----w |
-                ||     ||
-`
-
-	cows["turkey"] = `  {{.Thoughts}}                                  ,+*^^*+___+++_
+	cows[Turkey] = `  {{.Thoughts}}                                  ,+*^^*+___+++_
    {{.Thoughts}}                           ,*^^^^              )
     {{.Thoughts}}                       _+*                     ^**+_
      {{.Thoughts}}                    +^       _ _++*+_+++_,         )
@@ -638,7 +658,7 @@ Elephant inside ASCII snake
                       ^^^ ^^ ^^^ ^
 `
 
-	cows["turtle"] = `    {{.Thoughts}}                                  ___-------___
+	cows[Turtle] = `    {{.Thoughts}}                                  ___-------___
      {{.Thoughts}}                             _-~~             ~~-_
       {{.Thoughts}}                         _-~                    /~-_
              /^\__/^\         /~  \                   /    \
@@ -655,7 +675,7 @@ Elephant inside ASCII snake
                          (_(___/                         \_____)_)
 `
 
-	cows["tux"] = `   {{.Thoughts}}
+	cows[Tux] = `   {{.Thoughts}}
     {{.Thoughts}}
         .--.
        |o_o |
@@ -666,7 +686,7 @@ Elephant inside ASCII snake
     \___)=(___/
 `
 
-	cows["unipony-smaller"] = `   {{.Thoughts}}        \
+	cows[UniponySmaller] = `   {{.Thoughts}}        \
     {{.Thoughts}}        \
      {{.Thoughts}}       _\^
       {{.Thoughts}}    _- {{.Eyes}}\
@@ -676,7 +696,7 @@ Elephant inside ASCII snake
                 ||     ||
 `
 
-	cows["unipony"] = `   {{.Thoughts}}             \
+	cows[Unipony] = `   {{.Thoughts}}             \
     {{.Thoughts}}             \_
      {{.Thoughts}}             \\
       {{.Thoughts}}             \\/\
@@ -706,58 +726,4 @@ Elephant inside ASCII snake
                                  |  |                      |   |
                                  +--+                       ---+
 `
-
-	cows["vader-koala"] = `   {{.Thoughts}}
-    {{.Thoughts}}        .
-     .---.  //
-    Y|o o|Y//
-   /_(i=i)K/
-   ~()~*~()~
-    (_)-(_)
-
-     Darth
-     Vader
-     koala
-`
-
-	cows["vader"] = `        {{.Thoughts}}    ,-^-.
-         {{.Thoughts}}   !oYo!
-          {{.Thoughts}} /./=\.\______
-               ##        )\/\
-                ||-----w||
-                ||      ||
-
-               Cowth Vader
-`
-
-	cows["www"] = `        {{.Thoughts}}   ^__^
-         {{.Thoughts}}  ({{.Eyes}})\_______
-            (__)\       )\/\
-             {{.Tongue}} ||--WWW |
-                ||     ||
-`
-}
-
-func displayCows() {
-	var names []string
-	for name, _ := range cows {
-		names = append(names, name)
-	}
-
-	sort.Strings(names)
-
-	i := 0
-	for _, name := range names {
-		fmt.Print(name)
-		if i%7 == 6 {
-			fmt.Print("\n")
-		} else {
-			fmt.Print(" ")
-		}
-		i++
-	}
-
-	if i%7 != 0 {
-		fmt.Print("\n")
-	}
 }

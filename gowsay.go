@@ -14,7 +14,6 @@ type Face struct {
 	Eyes     string
 	Tongue   string
 	Thoughts string
-	Cowfile  string
 }
 
 type Mooptions struct {
@@ -32,17 +31,9 @@ type Mooptions struct {
 }
 
 func newFace(options Mooptions) Face {
-	cowfile := ""
-	if options.Cowfile == "" {
-		cowfile = "apt"
-	} else {
-		cowfile = options.Cowfile
-	}
-
 	f := Face{
-		Eyes:    "oo",
-		Tongue:  "  ",
-		Cowfile: cowfile,
+		Eyes:   "oo",
+		Tongue: "  ",
 	}
 
 	if options.Borg {
@@ -71,7 +62,6 @@ func newFace(options Mooptions) Face {
 	if options.Young {
 		f.Eyes = ".."
 	}
-
 	return f
 }
 
@@ -138,11 +128,11 @@ func maxWidth(msgs []string) int {
 	return max
 }
 
-func renderCow(face Face) (string, error) {
+func renderCow(cowtype CowType, face Face) (string, error) {
 	var output bytes.Buffer
-	templateString, exists := cows[face.Cowfile]
+	templateString, exists := cows[cowtype]
 	if !exists {
-		return "", fmt.Errorf("No such template: %s", face.Cowfile)
+		return "", fmt.Errorf("No such cowtype: %d", cowtype)
 	}
 	t := template.Must(template.New("cow").Parse(templateString))
 	if err := t.Execute(&output, face); err != nil {
@@ -151,14 +141,14 @@ func renderCow(face Face) (string, error) {
 	return output.String(), nil
 }
 
-func MakeCow(sentence string, options Mooptions) (string, error) {
+func MakeCow(sentence string, cowtype CowType, options Mooptions) (string, error) {
 	inputs := strings.Split(wordwrap.WrapString(sentence, uint(options.Columns)), "\n")
 	width := maxWidth(inputs)
 	messages := setPadding(inputs, width)
 
 	face := newFace(options)
 	balloon := constructBallon(face, messages, width, options.Think)
-	cow, err := renderCow(face)
+	cow, err := renderCow(cowtype, face)
 	if err != nil {
 		return "", err
 	}
