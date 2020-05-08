@@ -1,12 +1,9 @@
 package gowsay
 
 import (
+	"bytes"
 	"fmt"
-	"os"
 	"strings"
-
-	"io"
-	"log"
 	"text/template"
 
 	"github.com/mattn/go-runewidth"
@@ -134,23 +131,27 @@ func maxWidth(msgs []string) int {
 	return max
 }
 
-func renderCow(f Face, w io.Writer) {
-	t := template.Must(template.New("cow").Parse(cows[f.Cowfile]))
-
-	if err := t.Execute(w, f); err != nil {
-		log.Println(err)
-		os.Exit(1)
+func renderCow(face Face) (string, error) {
+	var output bytes.Buffer
+	t := template.Must(template.New("cow").Parse(cows[face.Cowfile]))
+	if err := t.Execute(&output, face); err != nil {
+		return "", err
 	}
+	return output.String(), nil
 }
 
-func MakeCow(sentence string, options Mooptions) {
+func MakeCow(sentence string, options Mooptions) (string, error) {
 	inputs := strings.Split(wordwrap.WrapString(sentence, uint(options.Columns)), "\n")
 	width := maxWidth(inputs)
 	messages := setPadding(inputs, width)
 
-	f := newFace(options)
-	balloon := constructBallon(f, messages, width, options.Think)
+	face := newFace(options)
+	balloon := constructBallon(face, messages, width, options.Think)
 
 	fmt.Println(balloon)
-	renderCow(f, os.Stdout)
+	cow, err := renderCow(face)
+	if err != nil {
+		return "", err
+	}
+	return cow, nil
 }
