@@ -1,7 +1,6 @@
 package gowsay
 
 import (
-	"bufio"
 	"fmt"
 	"os"
 	"strings"
@@ -12,7 +11,6 @@ import (
 
 	"github.com/mattn/go-runewidth"
 	"github.com/mitchellh/go-wordwrap"
-	flag "github.com/ogier/pflag"
 )
 
 type Face struct {
@@ -73,41 +71,6 @@ func newFace(options Mooptions) Face {
 	return f
 }
 
-func readInput(args []string) []string {
-	var tmps []string
-	if len(args) == 0 {
-		s := bufio.NewScanner(os.Stdin)
-
-		for s.Scan() {
-			tmps = append(tmps, s.Text())
-		}
-
-		if s.Err() != nil {
-			log.Printf("failed reading stdin: %s\n", s.Err().Error())
-			os.Exit(1)
-		}
-
-		if len(tmps) == 0 {
-			fmt.Println("Error: no input from stdin")
-			os.Exit(1)
-		}
-	} else {
-		tmps = args
-	}
-
-	var msgs []string
-	for i := 0; i < len(tmps); i++ {
-		expand := strings.Replace(tmps[i], "\t", "        ", -1)
-
-		tmp := wordwrap.WrapString(expand, uint(*columns))
-		for _, s := range strings.Split(tmp, "\n") {
-			msgs = append(msgs, s)
-		}
-	}
-
-	return msgs
-}
-
 func setPadding(msgs []string, width int) []string {
 	var ret []string
 	for _, m := range msgs {
@@ -118,11 +81,11 @@ func setPadding(msgs []string, width int) []string {
 	return ret
 }
 
-func constructBallon(f *face, msgs []string, width int) string {
+func constructBallon(f Face, msgs []string, width int, think bool) string {
 	var borders []string
 	line := len(msgs)
 
-	if *think {
+	if think {
 		f.Thoughts = "o"
 		borders = []string{"(", ")", "(", ")", "(", ")"}
 	} else {
@@ -171,8 +134,8 @@ func maxWidth(msgs []string) int {
 	return max
 }
 
-func renderCow(f *face, w io.Writer) {
-	t := template.Must(template.New("cow").Parse(cows[f.cowfile]))
+func renderCow(f Face, w io.Writer) {
+	t := template.Must(template.New("cow").Parse(cows[f.Cowfile]))
 
 	if err := t.Execute(w, f); err != nil {
 		log.Println(err)
@@ -180,13 +143,13 @@ func renderCow(f *face, w io.Writer) {
 	}
 }
 
-func MakeCow(options Mooptions) {
-	inputs := readInput(flag.Args())
+func MakeCow(sentence string, options Mooptions) {
+	inputs := strings.Split(wordwrap.WrapString(sentence, uint(options.Columns)), "\n")
 	width := maxWidth(inputs)
 	messages := setPadding(inputs, width)
 
-	f := newFace()
-	balloon := constructBallon(f, messages, width)
+	f := newFace(options)
+	balloon := constructBallon(f, messages, width, options.Think)
 
 	fmt.Println(balloon)
 	renderCow(f, os.Stdout)
