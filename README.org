@@ -1,5 +1,5 @@
-A cowsay implementation as a library. Cloned from
-https://en.wikipedia.org/wiki/Cowsay. Sample use:
+A cowsay implementation as a library. Forked from
+https://github.com/syohex/gowsay. Sample use:
 
 #+BEGIN_SRC Go
 package main
