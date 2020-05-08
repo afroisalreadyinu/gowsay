@@ -1,4 +1,4 @@
-package main
+package gowsay
 
 import (
 	"bufio"
@@ -15,49 +15,58 @@ import (
 	flag "github.com/ogier/pflag"
 )
 
-type face struct {
+type Face struct {
 	Eyes     string
 	Tongue   string
 	Thoughts string
-	cowfile  string
+	Cowfile  string
 }
 
-var borg, dead, greedy, paranoid, stoned, tired, wired, young, think *bool
-var list *bool
-var columns *int32
-var cowfile *string
+type Mooptions struct {
+	Borg     bool
+	Dead     bool
+	Greedy   bool
+	Paranoid bool
+	Stoned   bool
+	Tired    bool
+	Wired    bool
+	Young    bool
+	Think    bool
+	Columns  int32
+	Cowfile  string
+}
 
-func newFace() *face {
-	f := &face{
+func newFace(options Mooptions) Face {
+	f := Face{
 		Eyes:    "oo",
 		Tongue:  "  ",
-		cowfile: *cowfile,
+		Cowfile: options.Cowfile,
 	}
 
-	if *borg {
+	if options.Borg {
 		f.Eyes = "=="
 	}
-	if *dead {
+	if options.Dead {
 		f.Eyes = "xx"
 		f.Tongue = "U "
 	}
-	if *greedy {
+	if options.Greedy {
 		f.Eyes = "$$"
 	}
-	if *paranoid {
+	if options.Paranoid {
 		f.Eyes = "@@"
 	}
-	if *stoned {
+	if options.Stoned {
 		f.Eyes = "**"
 		f.Tongue = "U "
 	}
-	if *tired {
+	if options.Tired {
 		f.Eyes = "--"
 	}
-	if *wired {
+	if options.Wired {
 		f.Eyes = "OO"
 	}
-	if *young {
+	if options.Young {
 		f.Eyes = ".."
 	}
 
@@ -78,7 +87,7 @@ func readInput(args []string) []string {
 			os.Exit(1)
 		}
 
-		if len(tmps) == 0{
+		if len(tmps) == 0 {
 			fmt.Println("Error: no input from stdin")
 			os.Exit(1)
 		}
@@ -102,7 +111,7 @@ func readInput(args []string) []string {
 func setPadding(msgs []string, width int) []string {
 	var ret []string
 	for _, m := range msgs {
-		s := m + strings.Repeat(" ", width - runewidth.StringWidth(m))
+		s := m + strings.Repeat(" ", width-runewidth.StringWidth(m))
 		ret = append(ret, s)
 	}
 
@@ -171,28 +180,7 @@ func renderCow(f *face, w io.Writer) {
 	}
 }
 
-func main() {
-	borg = flag.BoolP("borg", "b", false, "borg eyes")
-	dead = flag.BoolP("dead", "d", false, "dead eyes and tongue")
-	greedy = flag.BoolP("greedy", "g", false, "greedy eyes")
-	paranoid = flag.BoolP("paranoid", "p", false, "paranoid eyes")
-	stoned = flag.BoolP("stoned", "s", false, "stoned eyes and tongue")
-	tired = flag.BoolP("tired", "t", false, "tired eyes")
-	wired = flag.BoolP("wired", "w", false, "wired eyes")
-	young = flag.BoolP("young", "y", false, "young eyes")
-	think = flag.Bool("think", false, "think version")
-
-	list = flag.BoolP("list", "l", false, "list cow files")
-	cowfile = flag.StringP("type", "f", "default", "specify cow file")
-	columns = flag.Int32P("columns", "W", 40, "columns")
-
-	flag.Parse()
-
-	if *list {
-		displayCows()
-		os.Exit(0)
-	}
-
+func MakeCow(options Mooptions) {
 	inputs := readInput(flag.Args())
 	width := maxWidth(inputs)
 	messages := setPadding(inputs, width)
