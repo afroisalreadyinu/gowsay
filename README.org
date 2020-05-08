@@ -1,0 +1,18 @@
+A cowsay implementation as a library. Cloned from
+https://en.wikipedia.org/wiki/Cowsay. Sample use:
+
+#+BEGIN_SRC Go
+package main
+
+import (
+	"fmt"
+	"gowsay"
+)
+
+func main() {
+	output, _ := gowsay.MakeCow("Hello There", gowsay.Mooptions{})
+	fmt.Println(output)
+}
+#+END_SRC
+
+Intended as demo in a blog post.
