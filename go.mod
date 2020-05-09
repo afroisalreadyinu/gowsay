@@ -1,4 +1,4 @@
-module github.com/afroisalreadyinu/gowsay
+module github.com/afroisalreadyinu/gowsay/v2
 
 go 1.14
 
