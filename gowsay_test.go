@@ -1,8 +1,8 @@
 package gowsay_test
 
 import (
+	"github.com/afroisalreadyinu/gowsay"
 	"github.com/stretchr/testify/assert"
-	"gowsay"
 	"testing"
 )
 
